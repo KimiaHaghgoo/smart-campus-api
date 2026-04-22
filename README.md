@@ -2,33 +2,69 @@
 
 ## Overview
 
-This is the REST API I built for the 5COSC022W coursework at the University of Westminster. It manages rooms and sensors across a university campus, with each sensor keeping a log of its past readings.
+This API is a backend system I built for the Client-Server Architectures coursework. It handles two main resources — **Rooms** and **Sensors** — with a third nested resource for **Sensor Readings**.
 
-Rooms are physical spaces on campus, sensors sit inside those rooms, and readings are the measurements each sensor records over time. The URL structure reflects this:
+The whole thing is built around RESTful principles. Rooms represent physical spaces on campus (like labs and libraries), sensors are devices deployed inside those rooms (temperature monitors, CO2 trackers, etc.), and readings are the historical data points recorded by each sensor over time.
+
+The resource hierarchy reflects this physical structure:
 /api/v1/                               → discovery endpoint
-/api/v1/rooms                          → all rooms
-/api/v1/rooms/{roomId}                 → one specific room
-/api/v1/sensors                        → all sensors
-/api/v1/sensors/{sensorId}/readings    → reading history for a sensor
+/api/v1/rooms                          → manage campus rooms
+/api/v1/rooms/{roomId}                 → a specific room
+/api/v1/sensors                        → manage all sensors
+/api/v1/sensors/{sensorId}/readings    → historical readings for a sensor
 
-Built with JAX-RS (Jersey 2.41) on Apache Tomcat 9 via NetBeans. Data is stored in-memory using HashMaps — no database. JSON serialisation is handled by Jackson.
+I built the API using **JAX-RS (Jersey 2.41)** as the REST framework, deployed on **Apache Tomcat 9** through **NetBeans**. All data is stored in-memory using HashMaps — no database is used. JSON serialisation is handled automatically by **Jackson**.
+
+Key design decisions:
+- A singleton `DataStore` class holds all data so it persists between requests
+- Custom exception mappers handle all error cases and return clean JSON — no raw stack traces are ever exposed
+- A logging filter records every request and response automatically
+- The sub-resource locator pattern is used for sensor readings to keep the code organised
 
 ---
 
 ## How to Build and Run
 
-**Prerequisites:** Java 11+, Maven 3.x, Apache Tomcat 9, NetBeans 29
+### Prerequisites
+
+- **Java 11 or higher** — check with `java -version`
+- **Maven 3.x** — check with `mvn -version`
+- **Apache Tomcat 9** — on Mac: `brew install tomcat@9`
+- **NetBeans 29**
+
+### Step 1 — Clone the project
 
 ```bash
 git clone https://github.com/KimiaHaghgoo/smart-campus-api.git
 ```
 
-Open the project in NetBeans, right-click → **Clean and Build**, then right-click → **Run**. NetBeans deploys it to Tomcat automatically.
+### Step 2 — Open in NetBeans
 
-The API runs at:
+File → Open Project → navigate to the cloned folder and open it.
+
+### Step 3 — Build
+
+Right-click the project → **Clean and Build**
+
+Wait for `BUILD SUCCESS` in the output panel.
+
+### Step 4 — Run
+
+Right-click the project → **Run**
+
+NetBeans deploys the project to Tomcat automatically. The API is now running at:
 http://localhost:8080/smart-campus-api/api/v1/
 
-To stop it, right-click the project → **Stop**.
+### Step 5 — Verify
+
+Open Postman or a browser and go to:
+http://localhost:8080/smart-campus-api/api/v1/rooms
+
+You should get back a JSON list with two pre-loaded rooms.
+
+### Step 6 — Stop the server
+
+Right-click the project → **Stop**
 
 ---
 
