@@ -7,11 +7,11 @@ This API is a backend system I built for the Client-Server Architectures coursew
 The whole thing is built around RESTful principles. Rooms represent physical spaces on campus (like labs and libraries), sensors are devices deployed inside those rooms (temperature monitors, CO2 trackers, etc.), and readings are the historical data points recorded by each sensor over time.
 
 The resource hierarchy reflects this physical structure:
-/api/v1/                               : discovery endpoint
-/api/v1/rooms                          : manage campus rooms
-/api/v1/rooms/{roomId}                 : a specific room
-/api/v1/sensors                        : manage all sensors
-/api/v1/sensors/{sensorId}/readings    : historical readings for a sensor
+- `/api/v1/` → discovery endpoint
+- `/api/v1/rooms` → manage campus rooms
+- `/api/v1/rooms/{roomId}` → a specific room
+- `/api/v1/sensors` → manage all sensors
+- `/api/v1/sensors/{sensorId}/readings` → historical readings for a sensor
 
 I built the API using **JAX-RS** as the REST framework, deployed on **Apache Tomcat** through **NetBeans**. All data is stored in-memory using HashMaps — no database is used. JSON serialisation is handled automatically by **Jackson**.
 
