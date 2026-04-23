@@ -7,13 +7,13 @@ This API is a backend system I built for the Client-Server Architectures coursew
 The whole thing is built around RESTful principles. Rooms represent physical spaces on campus (like labs and libraries), sensors are devices deployed inside those rooms (temperature monitors, CO2 trackers, etc.), and readings are the historical data points recorded by each sensor over time.
 
 The resource hierarchy reflects this physical structure:
-/api/v1/                               → discovery endpoint
-/api/v1/rooms                          → manage campus rooms
-/api/v1/rooms/{roomId}                 → a specific room
-/api/v1/sensors                        → manage all sensors
-/api/v1/sensors/{sensorId}/readings    → historical readings for a sensor
+/api/v1/                               : discovery endpoint
+/api/v1/rooms                          : manage campus rooms
+/api/v1/rooms/{roomId}                 : a specific room
+/api/v1/sensors                        : manage all sensors
+/api/v1/sensors/{sensorId}/readings    : historical readings for a sensor
 
-I built the API using **JAX-RS (Jersey 2.41)** as the REST framework, deployed on **Apache Tomcat 9** through **NetBeans**. All data is stored in-memory using HashMaps — no database is used. JSON serialisation is handled automatically by **Jackson**.
+I built the API using **JAX-RS** as the REST framework, deployed on **Apache Tomcat** through **NetBeans**. All data is stored in-memory using HashMaps — no database is used. JSON serialisation is handled automatically by **Jackson**.
 
 Key design decisions:
 - A singleton `DataStore` class holds all data so it persists between requests
@@ -25,46 +25,19 @@ Key design decisions:
 
 ## How to Build and Run
 
-### Prerequisites
-
-- **Java 11 or higher** — check with `java -version`
-- **Maven 3.x** — check with `mvn -version`
-- **Apache Tomcat 9** — on Mac: `brew install tomcat@9`
-- **NetBeans 29**
-
-### Step 1 — Clone the project
-
+**Clone the repo:**
 ```bash
 git clone https://github.com/KimiaHaghgoo/smart-campus-api.git
 ```
 
-### Step 2 — Open in NetBeans
+Open NetBeans, go to File → Open Project and select the folder we just cloned.
 
-File → Open Project → navigate to the cloned folder and open it.
+Once it's open, right-click the project and hit **Clean and Build** — wait until you see `BUILD SUCCESS` at the bottom. Then right-click again and hit **Run**. NetBeans handles the Tomcat deployment automatically.
 
-### Step 3 — Build
-
-Right-click the project → **Clean and Build**
-
-Wait for `BUILD SUCCESS` in the output panel.
-
-### Step 4 — Run
-
-Right-click the project → **Run**
-
-NetBeans deploys the project to Tomcat automatically. The API is now running at:
+The API will be running at:
 http://localhost:8080/smart-campus-api/api/v1/
 
-### Step 5 — Verify
-
-Open Postman or a browser and go to:
-http://localhost:8080/smart-campus-api/api/v1/rooms
-
-You should get back a JSON list with two pre-loaded rooms.
-
-### Step 6 — Stop the server
-
-Right-click the project → **Stop**
+To check it's working, hit that URL in Postman or a browser — we should get back a JSON list with the two pre-loaded rooms. To stop the server, right-click the project and hit **Stop**.
 
 ---
 
@@ -121,7 +94,7 @@ By default JAX-RS creates a new instance of each resource class for every incomi
 
 To deal with this I created a separate DataStore class that uses the singleton pattern. There is only ever one DataStore alive at a time, and every resource class calls DataStore.getInstance() to get it. The HashMaps inside it persist for the lifetime of the server.
 
-The downside is that concurrent requests could hit the same HashMap simultaneously and corrupt data. In a production system you would use ConcurrentHashMap or add synchronization. For this coursework it is not a concern since the load is minimal.
+The downside is that concurrent requests could hit the same HashMap simultaneously and corrupt data. In a production system you would use ConcurrentHashMap or add synchronization. For this project it is not our concern since the load is minimal.
 
 ### Part 1 — Q2: HATEOAS
 
@@ -133,7 +106,7 @@ The advantage over static docs is that if the URL structure ever changes, client
 
 Returning only IDs means the client needs a separate GET request for each one to retrieve any actual data. For 50 rooms that is 51 round-trips just to show a list. Returning full objects costs one request regardless of how many rooms there are, but the payload grows with the size of the collection.
 
-For this project returning full objects is fine — the number of rooms on a campus is bounded and the payloads stay small. At larger scale you would add pagination and probably return a trimmed summary object rather than the full room.
+For this project returning full objects is fine — the number of rooms on a campus is bounded and the payloads stay small. At larger scale we would add pagination and probably return a trimmed summary object rather than the full room.
 
 ### Part 2 — Q2: DELETE Idempotency
 
