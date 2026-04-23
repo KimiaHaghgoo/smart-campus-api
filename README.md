@@ -25,20 +25,27 @@ Key design decisions:
 
 ## How to Build and Run
 
-**Clone the repo:**
+To get this running on your machine, you need to have a few things installed first. I used Java 11, Maven 3.x, Apache Tomcat 9 and NetBeans 29 when building this — so we should make sure to have those installed.
+
+Once you have all of that sorted, clone the repo:
+
 ```bash
 git clone https://github.com/KimiaHaghgoo/smart-campus-api.git
 ```
 
-Open NetBeans, go to File → Open Project and select the folder we just cloned.
+Then open NetBeans, go to File → Open Project, navigate to the folder you just cloned and open it. You should see the project appear in the left panel with all the packages inside it.
 
-Once it's open, right-click the project and hit **Clean and Build** — wait until you see `BUILD SUCCESS` at the bottom. Then right-click again and hit **Run**. NetBeans handles the Tomcat deployment automatically.
+Next, right-click the project name and select **Clean and Build**. This compiles everything and packages it into a WAR file that Tomcat can run. Wait for the output panel at the bottom to show `BUILD SUCCESS` before moving on.
 
-The API will be running at:
+After that, right-click the project again and hit **Run**. NetBeans will deploy it to Tomcat automatically and open a browser window. At that point the API is live and you can start sending requests to it at:
 http://localhost:8080/smart-campus-api/api/v1/
 
-To check it's working, hit that URL in Postman or a browser — we should get back a JSON list with the two pre-loaded rooms. To stop the server, right-click the project and hit **Stop**.
+To quickly verify everything is working, open Postman or just paste this into the browser:
+http://localhost:8080/smart-campus-api/api/v1/rooms
 
+You should get back a JSON response with two rooms already in there — LIB-301 and LAB-101. Those are pre-loaded in the DataStore when the server starts.
+
+When you're done, right-click the project in NetBeans and hit **Stop** to shut the server down.
 ---
 
 ## curl Examples
