@@ -46,7 +46,7 @@ http://localhost:8080/smart-campus-api/api/v1/rooms
 You should get back a JSON response with two rooms already in there — LIB-301 and LAB-101. Those are pre-loaded in the DataStore when the server starts.
 
 When you're done, right-click the project in NetBeans and hit **Stop** to shut the server down.
----
+
 
 ## curl Examples
 
